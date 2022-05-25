@@ -1,0 +1,17 @@
+# packages
+datasets
+emoji
+sentence_transformers
+pandas
+protobuf
+pythainlp
+sklearn
+torch
+tqdm
+
+# dev
+ipywidgets
+jupyter
+jupyterlab
+matplotlib
+seaborn

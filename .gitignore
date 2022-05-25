@@ -1,0 +1,12 @@
+weights
+dataset
+results
+output
+
+# cache
+**/.ipynb_checkpoints
+**/__pycache__
+.Trash*
+
+# env
+pattern-env
