@@ -13,9 +13,9 @@ class LimeSodaDataset(torch.utils.data.Dataset):
         self.label_path = label_path
         self.delimiter = delimiter
         self.max_length = max_length
-        self.load_dataframe()
+        self.load_data()
         
-    def load_dataframe(self):
+    def load_data(self):
         print("Loading data...")
         data = []
         with open(self.label_path, "r") as f:
@@ -28,19 +28,22 @@ class LimeSodaDataset(torch.utils.data.Dataset):
                 line.pop("Document Tag")
                 line.pop("Text")
                 data.append(line)
-        self.data = pd.DataFrame(data)
+        data = pd.DataFrame(data)
+        
+        self.data = []
+        for _, item in data.iterrows():
+            text = item["text"]
+            label = item["label"]
+            feature = self.tokenizer(text, padding="max_length", max_length=self.max_length, truncation=True)
+            feature = {k: torch.tensor(v).to(self.device) for k, v in feature.items()}
+            feature["labels"] = torch.tensor(label).to(self.device)
+            self.data.append(feature)
         
     def __len__(self):
         return len(self.data)
     
     def __getitem__(self, idx):
-        item = self.data.iloc[idx]
-        text = item["text"]
-        label = item["label"]
-        feature = self.tokenizer(text, padding="max_length", max_length=self.max_length, truncation=True)
-        feature = {k: torch.tensor(v).to(self.device) for k, v in feature.items()}
-        feature["labels"] = torch.tensor(label).to(self.device)
-        return feature
+        return self.data[idx]
 
 
 def read_limesoda(limesoda_dir, train_percentage=None, delimiter=" "):

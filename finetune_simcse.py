@@ -38,9 +38,9 @@ def load_data(set_name):
     
 def main():
     dataset = load_data(DATASET)
-    for batch_size in [16, 24]:
-        for learning_rate in [3e-5, 7e-5, 1e-4]:
-            for epochs in [1, 3, 5]:
+    for batch_size in [24]:
+        for learning_rate in [3e-5]:
+            for epochs in [1]:
                 print(">"*30)
                 print(f"Batch size: {batch_size}")
                 print(f"Learning Rate: {learning_rate}")
@@ -69,13 +69,13 @@ def main():
                     epochs=epochs,
                     show_progress_bar=True,
                     optimizer_params={'lr': learning_rate},
-                    output_path=f'weights/{DATASET}/wangchanberta-simcse-raw-bs{batch_size}-epoch{epochs}-lr{learning_rate}',
+                    output_path=f'weights/{DATASET}/wangchanberta-simcse-{DATASET}-bs{batch_size}-epoch{epochs}-lr{learning_rate}',
                     save_best_model=True,
                     use_amp=True,
                     checkpoint_save_steps=1000
                 )
 
-                model.save(f"weights/{DATASET}/wangchanberta-simcse-raw-bs{batch_size}-epoch{epochs}-lr{learning_rate}/final")
+                model.save(f"weights/{DATASET}/wangchanberta-simcse-{DATASET}-bs{batch_size}-epoch{epochs}-lr{learning_rate}/final")
             
 
 if __name__ == "__main__":
